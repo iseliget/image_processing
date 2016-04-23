@@ -3,6 +3,11 @@
 % http://www.math.ucla.edu/~lvese/285j.1.05s/ROFScheme.pdf
 
 
+% img: original image
+% u0: image with noise
+% u: image with noise modified according to boundary condition
+
+
 % PREPROCESSING
 % Load image in BMP format
 img = imread('Lena.bmp'); % Do not use double quote
@@ -22,8 +27,13 @@ u0 = img + 20*noise; % Multiply by 1 the noise is too small to notice
 
 % NOISE REDUCTION
 % Implement the boundary condition
-u = padarray(img,[1 1]);
-u(1,2:size(u,2)-1) = img(1,:); % First row
-u(size(u,1),2:size(u,2)-1) = img(size(img,1),:); % Last row
-u(2:size(u,1)-1,1) = img(:,1); % First column
-u(size(u,2),2:size(u,1)-1) = img(:,size(img,2)); % Last column
+% u = padarray(img,[1 1]); 
+% If you don't have the function padarray then you might have to use loops
+u = zeros(size(u0)+2);
+u(2:size(u)-1,1) = u0(:,1); % First column
+u(2:size(u)-1,size(u,2)) = u0(:,size(u0,2)); % Last column
+u(1,2:size(u,2)-1) = u0(1,:); % First row
+u(size(u,1),2:size(u,2)-1) = u0(size(u0,1),:); % Last row
+for i=2:size(u)-1
+    u(2:size(u)-1,i) = u0(:,i-1);
+end
