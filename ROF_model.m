@@ -47,11 +47,16 @@ f = padarray(f,[1 1]);
 
 % Implement the scheme for interior points
 delta_t = 1;
-lambda = 40;
+lambda = 15; % higher the lambda, smoother the image
 h = 1;
 e = eps; 
 
-for iteration = 1:100
+num_of_iteration = 100;
+energy = zeros(num_of_iteration,1);
+c = 0;
+
+for iteration = 1:num_of_iteration
+    c = c + 1;
     for i = 2:size(u)-1
         for j = 2:size(u)-1
             c1 = 1/sqrt(e^2 + ((u(i+1,j)-u(i,j))/h)^2 + ((u(i,j+1)-u(i,j))/h)^2);
@@ -62,6 +67,8 @@ for iteration = 1:100
                 (u(i,j)+delta_t*f(i,j)+delta_t*(c1*u(i+1,j)+c2*u(i-1,j)+c3*u(i,j+1)+c4*u(i,j-1))/2*lambda*h^2);
         end
     end
+    % Compute L^2 norm
+    energy(c,1) = sum(sum(abs(f-u).^2,2),1);
 end
 
 figure; % open new window
@@ -69,3 +76,6 @@ imagesc(u);
 axis image;
 axis off;
 colormap(gray);
+
+figure;
+plot([1:num_of_iteration],energy,':');
