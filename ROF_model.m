@@ -47,9 +47,9 @@ f = padarray(f,[1 1]);
 
 % Implement the scheme for interior points
 delta_t = 1;
-lambda = 20;
+lambda = 40;
 h = 1;
-e = realim; % smallest float in Matlab
+e = eps; 
 
 for iteration = 1:100
     for i = 2:size(u)-1
