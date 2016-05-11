@@ -23,10 +23,10 @@ img = double(img); % Convert to double so you can add noise later
 noise = rand(size(img));
 f = img + 30*noise; % If multiply by 1 then the noise is too small to notice
 
-imagesc(f);
-axis image;
-axis off;
-colormap(gray);
+%imagesc(f);
+%axis image;
+%axis off;
+%colormap(gray);
 
 
 % NOISE REDUCTION
@@ -62,36 +62,41 @@ for i = 2:size(img_pad)-1
 end
 
 % Implement the scheme for interior points
-delta_t = 1;
-lambda = 15;
-h = 1;
-e = eps; 
-
-num_of_iteration = 30;
-energy = zeros(num_of_iteration,1);
-energy2 = zeros(num_of_iteration,1);
-c = 0;
-
-for iteration = 1:num_of_iteration
-    c = c + 1;
-    for i = 2:size(u)-1
-        for j = 2:size(u)-1
-            c1 = 1/sqrt(e^2 + ((u(i+1,j)-u(i,j))/h)^2 + ((u(i,j+1)-u(i,j))/h)^2);
-            c2 = 1/sqrt(e^2 + ((u(i,j)-u(i-1,j))/h)^2 + ((u(i-1,j+1)-u(i-1,j))/h)^2);
-            c3 = 1/sqrt(e^2 + ((u(i+1,j)-u(i,j))/h)^2 + ((u(i,j+1)-u(i,j))/h)^2);
-            c4 = 1/sqrt(e^2 + ((u(i+1,j-1)-u(i,j-1))/h)^2 + ((u(i,j)-u(i,j-1))/h)^2);
-            u(i,j) = (1/(1+delta_t+delta_t*(c1+c2+c3+c4)/2*lambda*h^2))*(u(i,j)+delta_t*f_pad(i,j)+delta_t*(c1*u(i+1,j)+c2*u(i-1,j)+c3*u(i,j+1)+c4*u(i,j-1))/2*lambda*h^2);
-        end
-    end
-    % Compute L^2 norm energy wrt original image
-    energy(c,1) = sum(sum((abs(img_pad - u)).^2,1),2);
-end
-
-figure; % open new window
-imagesc(u);
-axis image;
-axis off;
-colormap(gray);
-
+% Test for different lambda values
 figure;
-plot([1:num_of_iteration],energy);
+
+for lambda = 1:10
+    delta_t = 1;
+    %lambda = 15;
+    h = 1;
+    e = eps; 
+
+    num_of_iteration = 30;
+    energy = zeros(num_of_iteration,1);
+    energy2 = zeros(num_of_iteration,1);
+    c = 0;
+
+    for iteration = 1:num_of_iteration
+        c = c + 1;
+        for i = 2:size(u)-1
+            for j = 2:size(u)-1
+                c1 = 1/sqrt(e^2 + ((u(i+1,j)-u(i,j))/h)^2 + ((u(i,j+1)-u(i,j))/h)^2);
+                c2 = 1/sqrt(e^2 + ((u(i,j)-u(i-1,j))/h)^2 + ((u(i-1,j+1)-u(i-1,j))/h)^2);
+                c3 = 1/sqrt(e^2 + ((u(i+1,j)-u(i,j))/h)^2 + ((u(i,j+1)-u(i,j))/h)^2);
+                c4 = 1/sqrt(e^2 + ((u(i+1,j-1)-u(i,j-1))/h)^2 + ((u(i,j)-u(i,j-1))/h)^2);
+                u(i,j) = (1/(1+delta_t+delta_t*(c1+c2+c3+c4)/2*lambda*h^2))*(u(i,j)+delta_t*f_pad(i,j)+delta_t*(c1*u(i+1,j)+c2*u(i-1,j)+c3*u(i,j+1)+c4*u(i,j-1))/2*lambda*h^2);
+            end
+        end
+        % Compute L^2 norm energy wrt original image
+        energy(c,1) = sum(sum((abs(img_pad - u)).^2,1),2);
+    end
+
+    %figure; % open new window
+    %imagesc(u);
+    %axis image;
+    %axis off;
+    %colormap(gray);
+
+    subplot(2,5,lambda);
+    plot([1:num_of_iteration],energy,':');
+end
