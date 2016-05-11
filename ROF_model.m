@@ -65,7 +65,7 @@ end
 % Test for different lambda values
 figure;
 
-for lambda = 1:10
+for lambda = 4:12
     delta_t = 1;
     %lambda = 15;
     h = 1;
@@ -97,6 +97,8 @@ for lambda = 1:10
     %axis off;
     %colormap(gray);
 
-    subplot(2,5,lambda);
-    plot([1:num_of_iteration],energy,':');
+    subplot(3,3,lambda-3);
+    x = plot([1:num_of_iteration],energy,':');
+    title_string = sprintf('Lambda = %i',lambda);
+    title(title_string);
 end
