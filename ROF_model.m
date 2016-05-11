@@ -21,7 +21,7 @@ img = double(img); % Convert to double so you can add noise later
 
 % Generate noise
 noise = rand(size(img));
-f = img + 20*noise; % If multiply by 1 then the noise is too small to notice
+f = img + 30*noise; % If multiply by 1 then the noise is too small to notice
 
 imagesc(f);
 axis image;
@@ -51,14 +51,25 @@ for i = 2:size(f_pad)-1
     f_pad(2:size(f_pad)-1,i) = f(:,i-1);
 end
 
+% Pad img
+img_pad = zeros(size(img)+2);
+img_pad(2:size(img_pad)-1,1) = img(:,1); % First column
+img_pad(2:size(img_pad)-1,size(img_pad,2)) = img(:,size(img,2)); % Last column
+img_pad(1,2:size(img_pad,2)-1) = img(1,:); % First row
+img_pad(size(img_pad,1),2:size(img_pad,2)-1) = img(size(img,1),:); % Last row
+for i = 2:size(img_pad)-1
+    img_pad(2:size(img_pad)-1,i) = img(:,i-1);
+end
+
 % Implement the scheme for interior points
 delta_t = 1;
 lambda = 15;
 h = 1;
 e = eps; 
 
-num_of_iteration = 100;
+num_of_iteration = 30;
 energy = zeros(num_of_iteration,1);
+energy2 = zeros(num_of_iteration,1);
 c = 0;
 
 for iteration = 1:num_of_iteration
@@ -72,8 +83,8 @@ for iteration = 1:num_of_iteration
             u(i,j) = (1/(1+delta_t+delta_t*(c1+c2+c3+c4)/2*lambda*h^2))*(u(i,j)+delta_t*f_pad(i,j)+delta_t*(c1*u(i+1,j)+c2*u(i-1,j)+c3*u(i,j+1)+c4*u(i,j-1))/2*lambda*h^2);
         end
     end
-    % Compute L^2 norm
-    %energy(c,1) = sum(sum(abs(f-u).^2,2),1);
+    % Compute L^2 norm energy wrt original image
+    energy(c,1) = sum(sum((abs(img_pad - u)).^2,1),2);
 end
 
 figure; % open new window
@@ -83,4 +94,4 @@ axis off;
 colormap(gray);
 
 figure;
-plot([1:num_of_iteration],energy,':');
+plot([1:num_of_iteration],energy);
