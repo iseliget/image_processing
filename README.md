@@ -3,6 +3,10 @@ This repository contains codes for the course *Individual Studies: Literature on
 
 #### Rudin-Osher-Fatemi model
 
-######Parameter lambda
-Some representative values of lambda with 100 times iterations
+######L2 energy
+100 times iterations
 ![lambda_and_energy](lambda_and_energy.jpg)
+
+#####L1 energy
+100 times iterations
+![lambda_and_l1energy](lambda_and_l1energy.jpg)
