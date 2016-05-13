@@ -88,7 +88,7 @@ for lambda = 4:12
             end
         end
         % Compute L^2 norm energy wrt original image
-        energy(c,1) = sum(sum((abs(img_pad - u)).^2,1),2);
+        energy(c,1) = sum(sum(abs(img_pad - u),1),2);
     end
 
     %figure; % open new window
