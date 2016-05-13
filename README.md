@@ -4,4 +4,5 @@ This repository contains codes for the course *Individual Studies: Literature on
 #### Rudin-Osher-Fatemi model
 
 ######Parameter lambda
-Some representative values of lambda with 50 times iterations
+Some representative values of lambda with 100 times iterations
+![lambda_and_energy](lambda_and_energy.jpg)
