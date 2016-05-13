@@ -3,6 +3,6 @@ This repository contains codes for the course *Individual Studies: Literature on
 
 #### Rudin-Osher-Fatemi model
 
-######Parameters
-1. Lambda: A larger lambda value results in a smoother result image.
+######Parameter lambda
+Some representative values of lambda
 ![Image of lambda](https://github.com/iseliget/image_processing/blob/master/lambda_plots.bmp)
