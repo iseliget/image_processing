@@ -5,4 +5,3 @@ This repository contains codes for the course *Individual Studies: Literature on
 
 ######Parameter lambda
 Some representative values of lambda with 50 times iterations
-![Image of lambda](https://github.com/iseliget/image_processing/blob/master/lambda_plots.bmp)
